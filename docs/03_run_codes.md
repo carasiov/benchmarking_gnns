@@ -12,9 +12,10 @@
 
 ```
 # Run the main file (at the root of the project)
-python main_molecules_graph_regression.py --dataset ZINC --config 'configs/molecules_graph_regression_GatedGCN_ZINC_100k.json' # for CPU
-python main_molecules_graph_regression.py --dataset ZINC --gpu_id 0 --config 'configs/molecules_graph_regression_GatedGCN_ZINC_100k.json' # for GPU
+python main_TSP_edge_classification.py --dataset TSP --config 'configs/TSP_edge_classification_GatedGCN_100k.json  # for CPU
+python main_TSP_edge_classification.py --dataset TSP --gpu_id 0 --config 'configs/TSP_edge_classification_GatedGCN_100k.json'  # for GPU
 ```
+
 The training and network parameters for each dataset and network is stored in a json file in the [`configs/`](../configs) directory.
 
 
@@ -36,7 +37,7 @@ The training and network parameters for each dataset and network is stored in a 
 conda activate benchmark_gnn 
 jupyter notebook
 ```
-Use [`main_molecules_graph_regression.ipynb`](../main_molecules_graph_regression.ipynb) notebook to explore the code and do the training interactively.
+Use [`main_TSP_edge_classification.ipynb`](../main_TSP_edge_classification.ipynb) notebook to explore the code and do the training interactively.
 
 
 
@@ -45,16 +46,16 @@ Use [`main_molecules_graph_regression.ipynb`](../main_molecules_graph_regression
 
 ## 2. Output, checkpoints and visualizations
 
-Output results are located in the folder defined by the variable `out_dir` in the corresponding config file (eg. [`configs/molecules_graph_regression_GatedGCN_ZINC_100k.json`](../configs/molecules_graph_regression_GatedGCN_ZINC_100k.json) file).  
+Output results are located in the folder defined by the variable out_dir in the corresponding config file (e.g., configs/TSP_edge_classification_GatedGCN_100k.json file).  
 
-If `out_dir = 'out/molecules_graph_regression/'`, then 
+If `out_dir = 'out/TSP_edge_classification/'`, then 
 
 #### 2.1 To see checkpoints and results
-1. Go to`out/molecules_graph_regression/results` to view all result text files.
-2. Directory `out/molecules_graph_regression/checkpoints` contains model checkpoints.
+1. Go to`out/TSP_edge_classification/results` to view all result text files.
+2. Directory `out/TSP_edge_classification/checkpoints` contains model checkpoints.
 
 #### 2.2 To see the training logs in Tensorboard on local machine
-1. Go to the logs directory, i.e. `out/molecules_graph_regression/logs/`.
+1. Go to the logs directory, i.e. `out/TSP_edge_classification/logs/`.
 2. Run the commands
 ```
 source activate benchmark_gnn
@@ -78,46 +79,10 @@ tensorboard --logdir='./' --port 6006
 
 ```
 # At the root of the project 
-bash scripts/SuperPixels/script_main_superpixels_graph_classification_MNIST_100k.sh # run MNIST dataset for 100k params
-bash scripts/SuperPixels/script_main_superpixels_graph_classification_MNIST_500k.sh # run MNIST dataset for 500k params; WL-GNNs
-bash scripts/SuperPixels/script_main_superpixels_graph_classification_CIFAR10_100k.sh # run CIFAR10 dataset for 100k params
-bash scripts/SuperPixels/script_main_superpixels_graph_classification_CIFAR10_500k.sh # run CIFAR10 dataset for 500k params; WL-GNNs
-
-bash scripts/ZINC/script_main_molecules_graph_regression_ZINC_100k.sh # run ZINC dataset for 100k params
-bash scripts/ZINC/script_main_molecules_graph_regression_ZINC_500k.sh # run ZINC dataset for 500k params
-bash scripts/ZINC/script_main_molecules_graph_regression_ZINC_PE_GatedGCN_500k.sh # run ZINC dataset with PE for GatedGCN
-
-bash scripts/AQSOL/script_main_molecules_graph_regression_AQSOL_100k.sh # run AQSOL dataset for 100k params
-bash scripts/AQSOL/script_main_molecules_graph_regression_AQSOL_500k.sh # run AQSOL dataset for 500k params
-bash scripts/AQSOL/script_main_molecules_graph_regression_AQSOL_PE_GatedGCN_500k.sh # run AQSOL dataset with PE for GatedGCN
-
-bash scripts/WikiCS/script_main_WikiCS_node_classification_100k.sh # run WikiCS dataset for 100k params
-
-bash scripts/SBMs/script_main_SBMs_node_classification_PATTERN_100k.sh # run PATTERN dataset for 100k params
-bash scripts/SBMs/script_main_SBMs_node_classification_PATTERN_500k.sh # run PATTERN dataset for 500k params
-bash scripts/SBMs/script_main_SBMs_node_classification_PATTERN_PE_GatedGCN_500k.sh # run PATTERN dataset with PE for GatedGCN
-bash scripts/SBMs/script_main_SBMs_node_classification_CLUSTER_100k.sh # run CLUSTER dataset for 100k params
-bash scripts/SBMs/script_main_SBMs_node_classification_CLUSTER_500k.sh # run CLUSTER dataset for 500k params
-bash scripts/SBMs/script_main_SBMs_node_classification_CLUSTER_PE_GatedGCN_500k.sh # run CLUSTER dataset with PE for GatedGCN
-
 bash scripts/TSP/script_main_TSP_edge_classification_100k.sh # run TSP dataset for 100k params
-bash scripts/TSP/script_main_TSP_edge_classification_edge_feature_analysis.sh # run TSP dataset for edge feature analysis 
-
-bash scripts/COLLAB/script_main_COLLAB_edge_classification_40k.sh # run OGBL-COLLAB dataset for 40k params
-bash scripts/COLLAB/script_main_COLLAB_edge_classification_edge_feature_analysis.sh # run OGBL-COLLAB dataset for edge feature analysis 
-bash scripts/COLLAB/script_main_COLLAB_edge_classification_PE_GatedGCN_40k.sh # run OGBL-COLLAB dataset with PE for GatedGCN
-
-bash scripts/CSL/script_main_CSL_graph_classification_20_seeds.sh # run CSL dataset without node features on 20 seeds
-bash scripts/CSL/script_main_CSL_graph_classification_PE_20_seeds.sh # run CSL dataset with PE on 20 seeds
-
-bash scripts/GraphTheoryProp/script_main_GraphTheoryProp_multitask_100k.sh # run GraphTheoryProp dataset for 100k params
-
-bash scripts/CYCLES/script_main_CYCLES_graph_classification_all.sh # run CYCLES dataset for 100k params
-
-bash scripts/TU/script_main_TUs_graph_classification_100k_seed1.sh # run TU datasets for 100k params on seed1
-bash scripts/TU/script_main_TUs_graph_classification_100k_seed2.sh # run TU datasets for 100k params on seed2
+bash scripts/TSP/script_main_TSP_edge_classification_edge_feature_analysis.sh # run TSP dataset for edge feature analysis
 ```
-
+For GPU, add the --gpu_id argument to the scripts or modify them to include the GPU flag.
 Scripts are [located](../scripts/) at the `scripts/` directory of the repository.
 
  
@@ -125,7 +90,7 @@ Scripts are [located](../scripts/) at the `scripts/` directory of the repository
  <br>
 
 ## 4. Generate statistics obtained over mulitple runs (except CSL and TUs)
-After running a script, statistics (mean and standard variation) can be generated from a notebook. For example, after running the script `scripts/ZINC/script_main_molecules_graph_regression_ZINC_100k.sh`, go to the results folder `out/molecules_graph_regression/results/`, and run the [notebook](../scripts/StatisticalResults/generate_statistics_molecules_graph_regression_ZINC_100k.ipynb) `scripts/StatisticalResults/generate_statistics_molecules_graph_regression_ZINC_100k.ipynb` to generate the statistics.
+After running a script, statistics (mean and standard variation) can be generated from a notebook. For example, after running the script `scripts/TSP/script_main_TSP_edge_classification_100k.sh`, go to the results folder `out/TSP_edge_classification/results/`, and run the [notebook](../scripts/StatisticalResults/generate_statistics_TSP_edge_classification.ipynb) `scripts/StatisticalResults/generate_statistics_TSP_edge_classification.ipynb` to generate the statistics.
 
 
 

@@ -5,9 +5,9 @@
 
 ## 1. Organization of data/ directory 
 
-Each dataset in the [data/](../data/) directory is pre-processed and prepared in a specific folder, for example [data/molecules/](../data/molecules) for the ZINC dataset. The graph dataset is prepared and saved in the DGL format (compatible with PyTorch), see e.g. [`prepare_molecules.ipynb`](../data/molecules/prepare_molecules.ipynb) where the graph dataset is saved in *ZINC.pkl* file.
+The TSP dataset in the data/ directory is pre-processed and prepared in the data/TSP/ folder. The graph dataset is prepared and saved in the DGL format (compatible with PyTorch), as seen in prepare_TSP.ipynb where the graph dataset is saved in the TSP.pkl file.
 
-File [`data.py`](../data/data.py) contains function `LoadData()` that loads any dataset by calling a specific data function, for instance `MoleculeDataset()` that is defined in [molecules.py](../data/molecules.py). 
+File [`data.py`](../data/data.py) contains function `LoadData()` that loads any dataset by calling a specific data function, for instance `TSPDataset()` that is defined in [TSP.py](../data/TSP.py). 
 
 
 
@@ -22,8 +22,8 @@ File [`data.py`](../data/data.py) contains function `LoadData()` that loads any 
 
 ### 2.1 Prepare your dataset
 
-The user will first prepare for each graph, the adjacency matrix, the node feature and the edge feature (if any). 
-See  [prepare_molecules.ipynb](../data/molecules/prepare_molecules.ipynb) that calls class *MoleculeDatasetDGL()* defined in file [molecules.py](../data/molecules.py).
+First, prepare for each graph: the adjacency matrix, the node features, and the edge features (if any). 
+See  [prepare_TSP.ipynb](../data/TSP/prepare_TSP.ipynb) that calls class *TSPDatasetDGL()* defined in file [TSP.py](../data/TSP.py).
 
 
 
@@ -34,7 +34,7 @@ See  [prepare_molecules.ipynb](../data/molecules/prepare_molecules.ipynb) that c
 ### 2.2 Save your data in DGL format
 
 
-Then, the user will convert the graph into the DGL format. See class *MoleculeDGL()* in file [molecules.py](../data/molecules.py). User will have to complete the `_prepare()` method for the new dataset. A standard code is 
+Then, the user will convert the graph into the DGL format. See class *TSPDGL()* in file [TSP.py](../data/TSP.py). User will have to complete the `_prepare()` method for the new dataset. A standard code is 
 ```
 class NewDatasetDGL(torch.utils.data.Dataset):
     def __init__(self, name, **kwargs):
@@ -49,7 +49,7 @@ class NewDatasetDGL(torch.utils.data.Dataset):
         # of the new graph classification data
         
         # Steps
-        # S1: initilize a dgl graph g = dgl.DGLGraph()
+        # S1: initialize a dgl graph g = dgl.DGLGraph()
         # S2: add nodes using g.add_nodes()
         # S3: add edges using g.add_edges()
         # S4: add node feat by assigning a torch tensor to g.ndata['feat'] 
@@ -58,7 +58,7 @@ class NewDatasetDGL(torch.utils.data.Dataset):
         
         # Repeat Steps S1 to S6 for 'n_samples' number of times
         
-        # See data/molecules.py file for example, or the following link in dgl docs:
+        # See data/TSP.py file for example, or the following link in dgl docs:
         # https://docs.dgl.ai/en/latest/_modules/dgl/data/minigc.html#MiniGCDataset
         
     def __len__(self):
@@ -120,6 +120,8 @@ The user will upgrade `LoadData(DATASET_NAME)` in `data.py` with the name of the
 def LoadData(DATASET_NAME):
     if DATASET_NAME == 'NEW_DATA':
         return NewDataset(DATASET_NAME)
+    elif DATASET_NAME == 'TSP':
+        return TSPDataset(DATASET_NAME)
 ```
 
 
@@ -128,22 +130,21 @@ def LoadData(DATASET_NAME):
 
 ### 2.5 Create mini-batches for MP-GCNs
 
-Eventually, the user will call function `LoadData(DATASET_NAME)` to load the dataset and function `DataLoader()` to create mini-batch of graphs. For example, this code loads the ZINC dataset and prepares mini-batch of 128 train graphs:
+Eventually, the user will call function `LoadData(DATASET_NAME)` to load the dataset and function `DataLoader()` to create mini-batch of graphs. For example, this code loads the TSP dataset and prepares mini-batch of 128 train graphs:
 ```
 from data.data import LoadData
-from data.molecules import MoleculeDataset
+from data.TSP import TSPDataset
 from torch.utils.data import DataLoader
 
-DATASET_NAME = 'ZINC'
+DATASET_NAME = 'TSP'
 dataset = LoadData(DATASET_NAME)
-train_loader = DataLoader(dataset.train, batch_size=128, shuffle=True, collate_fn=MoleculeDataset.collate)
+train_loader = DataLoader(dataset.train, batch_size=128, shuffle=True, collate_fn=TSPDataset.collate)
 ```
 
-**Note** that the batching approach for MP-GCNs is not applicable for WL-GNNs which operate on dense tensors. Therefore, we simply have the following code for WL-GNNs.
+**Note**: The batching approach for MP-GCNs is not applicable for WL-GNNs which operate on dense tensors. For WL-GNNs, use the following code instead:
 
-```
-train_loader = DataLoader(dataset.train, shuffle=True, collate_fn=MoleculeDataset.collate_dense_gnn)
-```
+```python
+train_loader = DataLoader(dataset.train, shuffle=True, collate_fn=TSPDataset.collate_dense_gnn)´´´ 
 
 
 
@@ -151,7 +152,8 @@ train_loader = DataLoader(dataset.train, shuffle=True, collate_fn=MoleculeDatase
 
 ## 3. Dataset split
 
-A data split for the TU dataset that preserves the class distribution across train-validation-test sets was prepared. The splits are stored in the [TUs/](../data/TUs) folder. Similarly, the split indices for CSL are stored in the [CSL/](../data/CSL) folder. We also store the split for the ZINC dataset in the [molecules/](../data/molecules) folder. For COLLAB, the dataset splits are automatically fetched from the OGB library. For CYCLES and GraphTheoryProp, the splits are the same as in the corresponding original papers.
+For the TSP dataset, the split is defined in the data generation process. The split indices are stored within the TSP.pkl file. When loading the dataset, it's automatically split into train, validation, and test sets.
+If you're adding a new dataset, ensure that you provide a similar split mechanism, either by including the split in the data generation process or by implementing a custom splitting function in your dataset class.
 
 
 
