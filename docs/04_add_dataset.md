@@ -5,7 +5,7 @@
 
 ## 1. Organization of data/ directory 
 
-The TSP dataset in the data/ directory is pre-processed and prepared in the data/TSP/ folder. The graph dataset is prepared and saved in the DGL format (compatible with PyTorch), as seen in prepare_TSP.ipynb where the graph dataset is saved in the TSP.pkl file.
+The TSP dataset in the [data/](../data/) directory is pre-processed and prepared in the data/TSP/ folder. The graph dataset is prepared and saved in the DGL format (compatible with PyTorch), as seen in prepare_TSP.ipynb where the graph dataset is saved in the TSP.pkl file.
 
 File [`data.py`](../data/data.py) contains function `LoadData()` that loads any dataset by calling a specific data function, for instance `TSPDataset()` that is defined in [TSP.py](../data/TSP.py). 
 
